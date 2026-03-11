@@ -12,9 +12,8 @@ function buildServerContext(message: Message): string {
 
     return `
 Server name: ${guild.name}
-Member count: ${guild.memberCount}
 Channel name: ${(message.channel as GuildTextBasedChannel)?.name}
-User invoking command: ${message.author.username} (${message.author.id})
+User invoking command: ${message.author.username}
 `.trim();
 }
 
