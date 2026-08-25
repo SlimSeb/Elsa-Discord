@@ -1,4 +1,4 @@
-import {Message, TextChannel} from 'discord.js';
+import {Message, SplitOptions, TextBasedChannel, TextChannel, Util} from 'discord.js';
 import {sleep} from '.';
 
 // Credit : https://stackoverflow.com/questions/63322284/discord-js-get-an-array-of-all-messages-in-a-channel
@@ -22,4 +22,15 @@ export async function fetchAllMessages(channel: TextChannel): Promise<Message<bo
 
     console.log('returns '+ messages.length + ' messages');
     return messages;
+}
+
+/** Sends a message in order, split across as many Discord messages as its length requires. */
+export async function sendLongMessage(
+    channel: TextBasedChannel,
+    content: string,
+    options: SplitOptions = {maxLength: 2000}
+): Promise<void> {
+    for (const part of Util.splitMessage(content, options)) {
+        await channel.send(part);
+    }
 }

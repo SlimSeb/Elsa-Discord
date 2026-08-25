@@ -14,8 +14,6 @@ export interface IBot {
     repository: IBotRepository;
     isCleaning: boolean;
     snapChatsChannels: Map<string, Message[]>;
-    currentChatBots: Map<string, string>;
-
 
     addListeners(listener: Listener[]): void;
 
@@ -31,7 +29,6 @@ export class Bot implements IBot {
 
     isCleaning = false;
     snapChatsChannels = new Map<string, Message[]>();
-    currentChatBots = new Map<string, string>();
 
     constructor(client: Client,
                 commands: CommandCollection,
@@ -64,6 +61,9 @@ export class Bot implements IBot {
     }
 
     async onMessageCreate(message: Message) {
+        if (message.author.bot || message.author.id === this.client.user?.id) {
+            return;
+        }
         if (!message.content.startsWith(this.trigger)) {
             return;
         }
@@ -77,12 +77,6 @@ export class Bot implements IBot {
             .content
             .substring(this.trigger.length + command.length + 1)
             .trim();
-
-        const authorizedChannels = process.env.AUTHORIZED_CHANNELS?.split(';') ?? [];
-        if (message.author.id === this.client.user?.id
-            || (message.member?.id !== process.env.MAINTAINER && !authorizedChannels.includes(message.channelId))) {
-            return;
-        }
 
         if (this.commands.has(command)) {
             const commandInstance = this.commands.get(command);
