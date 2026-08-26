@@ -13,7 +13,7 @@ class RemoveRoles extends Command {
             await message.reply('Could not find the user');
             return;
         }
-        const roles = [...(await message.guild!.roles.fetch()).values()] ?? [];
+        const roles = [...(await message.guild!.roles.fetch()).values()];
         await message.reply(`Found ${roles.length} role(s)`);
         if (!roles) {
             return;

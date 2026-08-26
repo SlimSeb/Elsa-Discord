@@ -21,7 +21,7 @@ function parseContent(content: string, evaluate: (node: Expression) => unknown) 
 }
 
 export async function parseCustomCommand(bot: IBot, message: Message) {
-    if (message.guild === null) {
+    if (!message.inGuild()) {
         return;
     }
     if (!message.content.startsWith(bot.trigger ?? '')) {

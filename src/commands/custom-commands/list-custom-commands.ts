@@ -1,7 +1,7 @@
-import {Util} from 'discord.js';
 import {DateTime} from 'luxon';
 import Command from '../../command';
 import Context from '../../context';
+import {splitMessage} from '../../utils/discord';
 
 class ListCustomCommand extends Command {
     async execute({bot, message}: Context): Promise<void> {
@@ -16,7 +16,7 @@ class ListCustomCommand extends Command {
         const responses = commands.map(c => `${c.name}: ${c.content}. ` +
             `Créée le ${DateTime.fromFormat(c.createdAt.toString(), 'yyyy-MM-dd')
                 .toFormat('dd/MM/yyyy')}`);
-        for (const part of Util.splitMessage(
+        for (const part of splitMessage(
             `\`\`\`${responses.join('\n\n')}\`\`\``,
             {maxLength: 2000, append: '```', prepend: '```'}
         )) {

@@ -64,6 +64,9 @@ export class Bot implements IBot {
         if (message.author.bot || message.author.id === this.client.user?.id) {
             return;
         }
+        if (!message.inGuild()) {
+            return;
+        }
         if (!message.content.startsWith(this.trigger)) {
             return;
         }

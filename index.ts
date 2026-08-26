@@ -1,4 +1,4 @@
-import {Client, Intents} from 'discord.js';
+import {Client, GatewayIntentBits, Partials} from 'discord.js';
 import {loadPlugins} from './src/command-loader';
 import dotenv from 'dotenv';
 import {Bot} from './src/bot';
@@ -11,11 +11,17 @@ async function run() {
     const repository = new BotRepository();
     const client = new Client({
         intents: [
-            Intents.FLAGS.GUILDS,
-            Intents.FLAGS.GUILD_MESSAGES,
-            Intents.FLAGS.GUILD_MESSAGE_REACTIONS,
-            Intents.FLAGS.DIRECT_MESSAGES,
-        ]
+            GatewayIntentBits.Guilds,
+            GatewayIntentBits.GuildMessages,
+            GatewayIntentBits.GuildMessageReactions,
+            GatewayIntentBits.DirectMessages,
+            GatewayIntentBits.MessageContent,
+        ],
+        partials: [
+            Partials.Channel,
+            Partials.Message,
+            Partials.Reaction,
+        ],
     });
     const bot = new Bot(client, commands, process.env.TRIGGER ?? '!', repository);
     bot.addListeners(listeners);

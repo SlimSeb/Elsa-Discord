@@ -1,4 +1,5 @@
 import {
+    ChannelType,
     Client,
     Collection,
     GuildChannelCreateOptions,
@@ -192,9 +193,9 @@ class CleanChannel extends Command {
             authorLabel = ` from "${member?.displayName ?? authorId}"`;
         }
 
-        const me = channel.guild.me;
+        const me = channel.guild.members.me;
         const permissions = me ? channel.permissionsFor(me) : null;
-        if (!permissions?.has(['VIEW_CHANNEL', 'READ_MESSAGE_HISTORY', 'MANAGE_MESSAGES'])) {
+        if (!permissions?.has(['ViewChannel', 'ReadMessageHistory', 'ManageMessages'])) {
             await message.reply(`I need View Channel, Read Message History and Manage Messages in ${channel}.`);
             return;
         }
@@ -299,7 +300,8 @@ class TurboClean extends Command {
         }
 
         const options: GuildChannelCreateOptions = {
-            type: 'GUILD_TEXT',
+            name: channel.name,
+            type: ChannelType.GuildText,
             parent: channel.parent ?? undefined,
             position: channel.position,
             nsfw: channel.nsfw,
@@ -312,7 +314,7 @@ class TurboClean extends Command {
 
         try {
             // Create first, delete second: a failure here leaves the original channel intact.
-            const replacement = await channel.guild.channels.create(channel.name, options);
+            const replacement = await channel.guild.channels.create(options);
             await channel.delete(`turbo-clean by ${message.author.tag}`);
             await replacement.setPosition(channel.position).catch(() => null);
             await message.reply(`Recreated ${replacement}.`).catch(() => null);

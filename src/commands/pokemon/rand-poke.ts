@@ -2,13 +2,13 @@ import Command from '../../command';
 import Context from '../../context';
 import {Dex} from '@pkmn/dex';
 import {choice} from '../../utils/rand';
-import {ReplyMessageOptions} from 'discord.js';
+import {MessageReplyOptions} from 'discord.js';
 
 class RandPoke extends Command {
     async execute({message}: Context): Promise<void> {
         const pokemon = choice(Dex.species.all());
         const stats = pokemon.baseStats;
-        const messageOptions: ReplyMessageOptions = {
+        const messageOptions: MessageReplyOptions = {
             content: `**${pokemon.name}** (n°${pokemon.num})
             Type: ${pokemon.types.join('/')}
             Talents: ${Object.values(pokemon.abilities).join('/')}

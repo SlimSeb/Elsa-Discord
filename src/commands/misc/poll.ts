@@ -29,7 +29,7 @@ export class Poll {
     /**
      * Message in the guild that the poll was created in.
      */
-    private readonly pollCreationMessage: Message;
+    private readonly pollCreationMessage: Message<true>;
 
     private pollMessage: Message | null = null;
 
@@ -37,7 +37,7 @@ export class Poll {
 
     public readonly options: string[];
 
-    constructor(message: Message, question: string, options: string[]) {
+    constructor(message: Message<true>, question: string, options: string[]) {
         this.pollCreationMessage = message;
         this.question = question;
         this.options = options;

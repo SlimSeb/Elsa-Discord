@@ -9,7 +9,7 @@ import Context from '../../context';
 import {sendLongMessage} from '../../utils/discord';
 
 /** Falls back to the replied-to message, so answering a message with the command alone works. */
-async function resolvePrompt(message: Message, args: string): Promise<string | null> {
+async function resolvePrompt(message: Message<true>, args: string): Promise<string | null> {
     const prompt = args?.trim();
     if (prompt) {
         return prompt;
@@ -21,7 +21,7 @@ async function resolvePrompt(message: Message, args: string): Promise<string | n
     return null;
 }
 
-export async function replyWithError(message: Message, error: unknown): Promise<void> {
+export async function replyWithError(message: Message<true>, error: unknown): Promise<void> {
     if (error instanceof AiError) {
         console.error('AI request failed', error.reason ?? error);
         await message.channel.send(`:warning: ${error.message}`);
