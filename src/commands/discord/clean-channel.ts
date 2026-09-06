@@ -182,15 +182,12 @@ class CleanChannel extends Command {
         }
 
         let authorId: Snowflake | null = null;
-        let authorLabel = '';
         if (argsArray.length >= 2) {
             authorId = parseId(argsArray[1], USER_ID_REGEX);
             if (!authorId) {
                 await message.reply('Could not read that user. Give a user mention or a raw ID.');
                 return;
             }
-            const member = await message.guild?.members.fetch(authorId).catch(() => null);
-            authorLabel = ` from "${member?.displayName ?? authorId}"`;
         }
 
         const me = channel.guild.members.me;
@@ -201,11 +198,6 @@ class CleanChannel extends Command {
         }
         if (cleaningChannels.has(channel.id)) {
             await message.reply(`${channel} is already being cleaned. Use \`clean-stop\` to abort it.`);
-            return;
-        }
-        if (needsConfirmation(`${channel.id}:${message.author.id}`)) {
-            await message.reply(`Are you sure you want to clean all messages${authorLabel} in ${channel}? ` +
-                'If so, redo the command.');
             return;
         }
 
